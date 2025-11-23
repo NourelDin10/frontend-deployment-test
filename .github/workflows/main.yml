@@ -2,19 +2,31 @@ name: Frontend Deployment
 
 on:
   push:
-    branches: [main]
+    branches: 
+      - main 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
+  # Checkout the code
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
+    
+     #  Cache Docker layers
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
 
     - name: Build Step
       run: echo "Building frontend..."
 
+      #  Copy docker-compose.yml to server
     - name: Copy docker-compose to server
       uses: appleboy/scp-action@v0.1.4
       with:
@@ -24,6 +36,7 @@ jobs:
         source: "docker-compose.yml"
         target: "/var/www/frontend"
 
+# 5Deploy Docker Containers via SSH
     - name: Deploy Using SSH
       uses: appleboy/ssh-action@v1.0.0
       with:
@@ -36,3 +49,7 @@ jobs:
           docker-compose down
           docker-compose up -d
           echo "Deployment completed"
+    # Notification (optional)
+    - name: Deployment Notification
+      if: failure()
+      run: echo "Deployment failed! Please check the workflow logs."
