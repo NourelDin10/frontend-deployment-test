@@ -36,3 +36,7 @@ services:
     ports:
       - "3001:3001"
     restart: unless-stopped
+```
+## Accessing the Application
+- http://<SERVER_IP>:3001
+
