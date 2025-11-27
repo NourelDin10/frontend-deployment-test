@@ -53,3 +53,32 @@ jobs:
     - name: Deployment Notification
       if: failure()
       run: echo "Deployment failed! Please check the workflow logs."
+  # jobs:
+  #  deploy:
+  #   runs-on: self-hosted
+    
+  #   steps:
+    
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v3
+
+     
+  #     - name: Build Step
+  #       run: echo "Building frontend..."
+
+      
+  #     - name: Deploy Docker Containers
+  #       run: |
+  #         cd /var/www/frontend
+  #         # يسحب آخر image من Docker Hub
+  #         docker-compose pull
+  #         # يغلق أي containers شغالة
+  #         docker-compose down
+  #         # يشغل containers جديدة في الخلفية
+  #         docker-compose up -d
+  #         echo "Deployment completed"
+
+      
+  #     - name: Deployment Notification
+  #       if: failure()
+  #       run: echo "Deployment failed! Please check the workflow logs."
